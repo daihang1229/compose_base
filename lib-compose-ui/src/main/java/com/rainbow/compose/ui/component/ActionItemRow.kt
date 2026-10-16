@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.rainbow.compose.ui.onClickDelay
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
 /**
  * 通用条目行：左侧标题 + 右侧值（可选）+ 右侧箭头。
@@ -44,10 +44,10 @@ fun ActionItemRow(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        DramaText(
+        CommonText(
             text = title,
             style = MaterialTheme.typography.bodyLarge,
-            color = dramaColors.textPrimary,
+            color = commonColors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -56,10 +56,10 @@ fun ActionItemRow(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             if (value != null) {
-                DramaText(
+                CommonText(
                     text = value,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = dramaColors.textSecondary,
+                    color = commonColors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -68,7 +68,7 @@ fun ActionItemRow(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp),
-                tint = dramaColors.textSecondary
+                tint = commonColors.textSecondary
             )
         }
     }

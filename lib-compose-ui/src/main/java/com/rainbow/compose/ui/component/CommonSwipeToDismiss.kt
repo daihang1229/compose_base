@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.Color
 /** 可复用的左右滑删除容器。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DramaSwipeToDismiss(
+fun CommonSwipeToDismiss(
     onDismiss: (SwipeToDismissBoxValue) -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Transparent,

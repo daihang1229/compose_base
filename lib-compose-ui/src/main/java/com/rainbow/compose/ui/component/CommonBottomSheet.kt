@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 /** 统一的 ModalBottomSheet 容器。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DramaBottomSheet(
+fun CommonBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),

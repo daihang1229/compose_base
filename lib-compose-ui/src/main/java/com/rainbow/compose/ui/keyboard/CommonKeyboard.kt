@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 
 /** Compose 键盘控制器，不持有 Activity、View 或 InputMethodManager。 */
-class DramaKeyboardController internal constructor(
+class CommonKeyboardController internal constructor(
     private val focusManager: FocusManager,
     private val keyboardController: SoftwareKeyboardController?,
 ) {
@@ -32,16 +32,16 @@ class DramaKeyboardController internal constructor(
 }
 
 @Composable
-fun rememberDramaKeyboardController(): DramaKeyboardController {
+fun rememberCommonKeyboardController(): CommonKeyboardController {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
     return remember(focusManager, keyboardController) {
-        DramaKeyboardController(focusManager, keyboardController)
+        CommonKeyboardController(focusManager, keyboardController)
     }
 }
 
 @Composable
-fun rememberDramaKeyboardVisible(): State<Boolean> {
+fun rememberCommonKeyboardVisible(): State<Boolean> {
     val density = LocalDensity.current
     val imeInsets = WindowInsets.ime
     return remember(density, imeInsets) {
@@ -49,4 +49,4 @@ fun rememberDramaKeyboardVisible(): State<Boolean> {
     }
 }
 
-fun Modifier.dramaImePadding(): Modifier = imePadding()
+fun Modifier.commonImePadding(): Modifier = imePadding()

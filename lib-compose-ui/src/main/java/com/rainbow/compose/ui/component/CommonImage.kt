@@ -12,7 +12,7 @@ import coil3.compose.AsyncImage
  * Compose 网络图片入口，统一封装 AsyncImage 的裁剪、占位图和错误图行为。
  */
 @Composable
-fun DramaImage(
+fun CommonImage(
     url: String?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,

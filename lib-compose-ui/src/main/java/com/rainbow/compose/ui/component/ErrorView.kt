@@ -12,11 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.rainbow.compose.ui.dimen.Dimens
-import com.rainbow.compose.ui.theme.DramaTypography
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.CommonTypography
+import com.rainbow.compose.ui.theme.commonColors
 
 @Composable
-fun DramaErrorView(
+fun CommonErrorView(
     message: String,
     onRetry: (() -> Unit)? = null,
     modifier: Modifier = Modifier
@@ -31,13 +31,13 @@ fun DramaErrorView(
         ) {
             Text(
                 text = message,
-                style = DramaTypography.bodyMedium,
-                color = dramaColors.textSecondary
+                style = CommonTypography.bodyMedium,
+                color = commonColors.textSecondary
             )
             if (onRetry != null) {
                 Button(
                     onClick = onRetry,
-                    colors = ButtonDefaults.buttonColors(containerColor = dramaColors.primary)
+                    colors = ButtonDefaults.buttonColors(containerColor = commonColors.primary)
                 ) {
                     Text(text = "重试", color = Color.White)
                 }

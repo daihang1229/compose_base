@@ -7,15 +7,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
-/** 项目统一文本组件，默认使用语义化颜色和 DramaTypography。 */
+/** 项目统一文本组件，默认使用语义化颜色和 CommonTypography。 */
 @Composable
-fun DramaText(
+fun CommonText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = MaterialTheme.typography.bodyMedium,
-    color: Color = dramaColors.textPrimary,
+    color: Color = commonColors.textPrimary,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
 ) {

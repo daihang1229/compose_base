@@ -19,7 +19,7 @@ import androidx.compose.ui.window.DialogProperties
 /** 通用 Compose 弹窗容器，统一宽度、圆角和关闭行为。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DramaDialog(
+fun CommonDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(),
@@ -46,7 +46,7 @@ fun DramaDialog(
 
 /** 标准确认弹窗，适用于标题、说明、取消和确认操作。 */
 @Composable
-fun DramaAlertDialog(
+fun CommonAlertDialog(
     title: String,
     message: String? = null,
     confirmText: String,

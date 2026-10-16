@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rainbow.compose.core.contract.ErrorType
 import com.rainbow.compose.ui.R
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
 /**
  * 默认错误页面。
@@ -62,7 +62,7 @@ fun DefaultErrorPage(
                 text = subtitle,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                color = dramaColors.textSecondary,
+                color = commonColors.textSecondary,
                 textAlign = TextAlign.Center,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis

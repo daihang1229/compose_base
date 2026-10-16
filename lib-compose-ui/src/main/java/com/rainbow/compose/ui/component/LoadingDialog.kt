@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
 /**
  * 浮层 Loading 弹窗：半透明遮罩上的居中转圈，不遮挡整页内容区（区别于全屏 StatusOverlay）。
@@ -25,7 +25,7 @@ fun LoadingDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {}
 ) {
-    DramaDialog(
+    CommonDialog(
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         properties = DialogProperties(
@@ -41,7 +41,7 @@ fun LoadingDialog(
                 modifier = Modifier.size(48.dp),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = dramaColors.primary)
+                CircularProgressIndicator(color = commonColors.primary)
             }
         }
     }

@@ -26,7 +26,7 @@ import com.rainbow.compose.ui.dimen.Dimens.topBarHeight
  *         state = uiState,
  *         onRetry = { vm.load() }
  *     )
- *     DramaTitleBar(..., modifier = Modifier.align(Alignment.TopCenter))
+ *     CommonTitleBar(..., modifier = Modifier.align(Alignment.TopCenter))
  * }
  * ```
  */

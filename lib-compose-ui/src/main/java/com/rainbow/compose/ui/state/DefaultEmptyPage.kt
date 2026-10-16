@@ -18,7 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rainbow.compose.ui.R
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
 /**
  * 默认空数据页面。
@@ -49,7 +49,7 @@ fun DefaultEmptyPage(
             text = message,
             fontSize = 14.sp,
             lineHeight = 20.sp,
-            color = dramaColors.textSecondary,
+            color = commonColors.textSecondary,
             textAlign = TextAlign.Center
         )
 

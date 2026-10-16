@@ -16,7 +16,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.rainbow.compose.ui.R
-import com.rainbow.compose.ui.theme.Drama_BF000000
+import com.rainbow.compose.ui.theme.Common_BF000000
 
 /**
  * 默认加载覆盖层。
@@ -39,7 +39,7 @@ fun DefaultLoadingOverlay(
         modifier = modifier
             .size(50.dp)
             .clip(RoundedCornerShape(8.dp))
-            .background(Drama_BF000000),
+            .background(Common_BF000000),
         contentAlignment = Alignment.Center
     ) {
         if (composition != null) {

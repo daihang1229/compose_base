@@ -21,7 +21,7 @@ import kotlinx.coroutines.delay
 
 /** 项目统一 Snackbar 外观。 */
 @Composable
-fun DramaSnackbarHost(
+fun CommonSnackbarHost(
     hostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -42,7 +42,7 @@ fun DramaSnackbarHost(
 
 /** 页面级 Scaffold，统一承载 Snackbar。 */
 @Composable
-fun DramaScaffold(
+fun CommonScaffold(
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.background,
@@ -51,14 +51,14 @@ fun DramaScaffold(
     Scaffold(
         modifier = modifier,
         containerColor = containerColor,
-        snackbarHost = { DramaSnackbarHost(snackbarHostState) },
+        snackbarHost = { CommonSnackbarHost(snackbarHostState) },
         content = content,
     )
 }
 
 /** 需要旧版居中短提示样式时使用；页面内普通反馈优先使用 Snackbar。 */
 @Composable
-fun DramaToastHost(
+fun CommonToastHost(
     message: String?,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,

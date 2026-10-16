@@ -3,7 +3,7 @@
 通用的 Compose MVI 底层框架，供多个仓库复用。包含：
 
 - **Compose MVI 架构**（`lib-compose-core`）：`UiState` / `Intent` / `Effect` 契约、`BaseMviViewModel`、`StateController`、`CollectEffect`、`BaseComposeActivity`、`BaseViewModel` 等。
-- **Compose 设计系统**（`lib-compose-ui`）：`DramaTheme`、`DramaTitleBar`、`StatusOverlay`、`PullToRefreshLayout`、`DramaDialog`、`DramaImage` 等组件，以及语义化颜色 / 尺寸 / 字体 / 图标 / Lottie 资源。
+- **Compose 设计系统**（`lib-compose-ui`）：`CommonTheme`、`CommonTitleBar`、`StatusOverlay`、`PullToRefreshLayout`、`CommonDialog`、`CommonImage` 等组件，以及语义化颜色 / 尺寸 / 字体 / 图标 / Lottie 资源。
 - **通用工具类**（`lib-compose-core/utils`）：`SingleLiveEvent`、`ActivityUtils`、`StateSizeTracker` 等。
 
 > 本仓库由 drama-android 项目抽取、解耦而来。原业务耦合（TheRouter / RxBus / 沉浸式 / 埋点 / BaseKV 等）已移除，仅保留 AndroidX + Compose + 协程 依赖。
@@ -21,12 +21,12 @@ compose_base/
 │       └── log/             # ComposeLog
 └── lib-compose-ui/          # 设计系统组件 + 主题 + 资源
     └── com.rainbow.compose.ui
-        ├── theme/           # DramaTheme / DramaColors / Typography / Color
-        ├── component/       # DramaTitleBar / StatusOverlay / PullToRefreshLayout ...
+        ├── theme/           # CommonTheme / CommonColors / Typography / Color
+        ├── component/       # CommonTitleBar / StatusOverlay / PullToRefreshLayout ...
         ├── state/           # DefaultLoadingOverlay / DefaultErrorPage / DefaultEmptyPage ...
         ├── dimen/           # Dimens
-        ├── keyboard/        # DramaKeyboard
-        └── BaseDramaComposeActivity.kt
+        ├── keyboard/        # CommonKeyboard
+        └── BaseCommonComposeActivity.kt
 ```
 
 ## 快速开始
@@ -79,7 +79,7 @@ class HomeViewModel : BaseMviViewModel<HomeIntent, HomeEffect>() {
 }
 
 // Activity
-class HomeComposeActivity : BaseDramaComposeActivity() {
+class HomeComposeActivity : BaseCommonComposeActivity() {
     private val viewModel by viewModels<HomeViewModel>()
 
     @Composable
@@ -96,7 +96,7 @@ class HomeComposeActivity : BaseDramaComposeActivity() {
 fun HomeContent(uiState: UiState<List<Item>>, onIntent: (HomeIntent) -> Unit) {
     Box(Modifier.fillMaxSize()) {
         Column {
-            DramaTitleBar(title = "首页", onBack = { })
+            CommonTitleBar(title = "首页", onBack = { })
             // ... 列表内容
         }
         StatusOverlay(state = uiState, onRetry = { onIntent(HomeIntent.Load) })

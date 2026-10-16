@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
  * 不耦合任何路由、事件总线、沉浸式或业务埋点逻辑。
  *
  * 继承链：
- *   YourComposeActivity → BaseDramaComposeActivity → BaseComposeActivity → ComponentActivity
+ *   YourComposeActivity → BaseCommonComposeActivity → BaseComposeActivity → ComponentActivity
  */
 abstract class BaseComposeActivity : ComponentActivity() {
 

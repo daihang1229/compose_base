@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rainbow.compose.ui.R
 import com.rainbow.compose.ui.onClickDelay
-import com.rainbow.compose.ui.theme.dramaColors
+import com.rainbow.compose.ui.theme.commonColors
 
 /**
  * 通用标题栏。
@@ -45,7 +45,7 @@ import com.rainbow.compose.ui.theme.dramaColors
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DramaTitleBar(
+fun CommonTitleBar(
     title: String,
     modifier: Modifier = Modifier,
     onBack: (() -> Unit)? = { },
@@ -59,7 +59,7 @@ fun DramaTitleBar(
     onTitleClick: (() -> Unit)? = null,
     onTitleLongClick: (() -> Unit)? = null
 ) {
-    val tintColor = dramaColors.titleBarIcon
+    val tintColor = commonColors.titleBarIcon
 
     Column(
         modifier = modifier
@@ -155,7 +155,7 @@ fun DramaTitleBar(
 
         if (bottomDivider) {
             HorizontalDivider(
-                color = dramaColors.divider,
+                color = commonColors.divider,
                 thickness = 0.5.dp
             )
         }
@@ -163,10 +163,10 @@ fun DramaTitleBar(
 }
 
 /**
- * 带底部分割线的 [DramaTitleBar]。
+ * 带底部分割线的 [CommonTitleBar]。
  */
 @Composable
-fun DramaTitleBarWithBack(
+fun CommonTitleBarWithBack(
     title: String,
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
@@ -175,7 +175,7 @@ fun DramaTitleBarWithBack(
     rightIcon: Painter? = null,
     onRightIcon: (() -> Unit)? = null,
 ) {
-    DramaTitleBar(
+    CommonTitleBar(
         title = title,
         modifier = modifier,
         onBack = onBack,
