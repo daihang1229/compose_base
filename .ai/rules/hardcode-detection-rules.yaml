@@ -1,0 +1,206 @@
+# 硬编码与安全合规检测规则集
+# 用于 Pre-commit Hook 和 CI 安全扫描
+
+# ============================================================================
+# 规则格式说明
+# ============================================================================
+# 每条规则包含：
+#   - id: 规则唯一标识
+#   - name: 规则名称
+#   - severity: 严重程度 (CRITICAL/HIGH/MEDIUM/LOW)
+#   - pattern: 正则表达式
+#   - file_patterns: 适用的文件类型
+#   - description: 规则描述
+#   - false_positive_patterns: 误报排除模式
+#   - fix_suggestion: 修复建议
+# ============================================================================
+
+rules:
+  # ==========================================================================
+  # 1. API Key / Secret 检测 & 密钥管理规约
+  # ==========================================================================
+  - id: SECURITY_001
+    name: Hardcoded API Key / Secret
+    severity: CRITICAL
+    pattern: |
+      (?i)(api[_-]?key|apikey|secret|app[_-]?secret|client[_-]?secret)\s*[=:]\s*["']([a-zA-Z0-9_\-]{16,})["']
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+      - "*.xml"
+      - "*.properties"
+    description: 检测硬编码的 API Key 或 Secret，违反密钥分段存储规约
+    false_positive_patterns:
+      - "BuildConfig\\."
+      - "\\$\\{.*\\}"
+    fix_suggestion: |
+      遵循《第三方 SDK 密钥管理规范》：
+      1. 系统级 Key：移至 local.properties 并通过 build.gradle 注入。
+      2. SDK 公开 Key：收纳至集中配置类或 strings.xml。
+      3. 核心签名 Key：必须采用【逻辑分段拼接】，严禁以完整字符串明文存放。
+
+  # ==========================================================================
+  # 2. 密码检测 (Password Audit)
+  # ==========================================================================
+  - id: SECURITY_002
+    name: Password in Code
+    severity: CRITICAL
+    pattern: |
+      (?i)(password|passwd|pwd)\s*[=:]\s*["']([^"']{4,})["']
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+      - "*.xml"
+    description: 检测硬编码的明文密码
+    false_positive_patterns:
+      - "password_hint"
+      - "password_toggle"
+      - "inputType.*password"
+    fix_suggestion: |
+      不应在代码中硬编码任何密码：
+      - 运行时：通过认证接口获取，并使用 EncryptedSharedPreferences 管理。
+
+  # ==========================================================================
+  # 3. 强制日志规范 (Logging Specs)
+  # ==========================================================================
+  - id: SECURITY_003
+    name: Prohibited Raw Logging
+    severity: HIGH
+    pattern: |
+      (Log\.(v|d|i|w|e)|System\.out\.println)\s*\(
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 禁止使用 Android 原生 Log 或 System.out，规范要求统一使用日志工具（如 ComposeLog）
+    false_positive_patterns:
+      - "^[0-9]+:\\s*//"  # 豁免单行 // 注释代码（引擎传入含行号前缀，故锚定 行号:空白// ）
+    fix_suggestion: |
+      遵循《高效日志规范》：
+      - 统一替换为项目统一日志工具（如 com.rainbow.compose.core.log.ComposeLog）。
+      - 确保线上 Release 版本自动屏蔽控制台输出。
+
+  - id: SECURITY_004
+    name: Unmasked Sensitive Data in Logs
+    severity: HIGH
+    pattern: |
+      ComposeLog\.(i|w|e)\s*\(.*\b(token|password|coins|bonus|uid|deviceId|device_id|deviceid|phone|email)\b.*\)
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 检测到可能在日志中明文打印敏感字段（仅扫 i/w/e 级别，因 d/v 在 release 包不输出）
+    false_positive_patterns:
+      - "^[0-9]+:\\s*//"  # 豁免单行 // 注释代码（引擎传入含行号前缀）
+    fix_suggestion: |
+      遵循《敏感数据处理规范》：
+      - 严禁打印明文密码/Token。
+      - 归因数据、支付参数在打印前必须加密。
+      - 调试日志请使用 d/v 级别（release 包不输出，无线上泄漏风险）。
+
+  # ==========================================================================
+  # 4. 网络与传输安全
+  # ==========================================================================
+  - id: SECURITY_005
+    name: Insecure TrustManager
+    severity: CRITICAL
+    pattern: |
+      checkClientTrusted|checkServerTrusted
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 检测到自定义 TrustManager 逻辑，可能绕过证书校验
+    false_positive_patterns: []
+    fix_suggestion: |
+      严禁手动实现信任所有证书的 TrustManager。应复用统一证书信任管理以防御用户级抓包证书。
+
+  - id: SECURITY_006
+    name: HTTP Cleartext Protocol
+    severity: MEDIUM
+    pattern: |
+      (?i)"http://(?!schemas\.android\.com|www\.w3\.org)[a-zA-Z0-9.\-]+"
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 检测到硬编码的 HTTP 明文链接
+    false_positive_patterns:
+      - "localhost"
+      - "127.0.0.1"
+      - "10.0.2.2"
+    fix_suggestion: |
+      强制使用 HTTPS 协议防止中间人攻击。开发备用域应配置在 local.properties 中。
+
+  # ==========================================================================
+  # 5. WebView 安全规约
+  # ==========================================================================
+  - id: SECURITY_007
+    name: Dangerous WebSettings
+    severity: HIGH
+    pattern: |
+      setAllowUniversalAccessFromFileURLs\(true\)|setAllowFileAccessFromFileURLs\(true\)
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 开启了过于宽松的 WebSettings 权限
+    false_positive_patterns: []
+    fix_suggestion: |
+      遵循《WebView 与 H5 容器规范》：
+      - 严禁开启全路径 File 访问。
+      - 桥接交互必须统一通过 WebView 容器进行初始化。
+
+  - id: SECURITY_008
+    name: WebView Interface Standard
+    severity: MEDIUM
+    pattern: |
+      @JavascriptInterface\s+public\s+\w+\s+\w+\((?!String\s+json\s*\)\s*\{)
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: JSBridge 接口不符合入参规范（应统一使用 json: String）
+    false_positive_patterns: []
+    fix_suggestion: |
+      遵循《WebView 交互规范》：所有 @JavascriptInterface 方法入参必须为 json: String，内部通过 JSONObject 解析。
+
+  # ==========================================================================
+  # 6. 其它规范 (Persistence & Debug)
+  # ==========================================================================
+  - id: SECURITY_009
+    name: Prohibited External Storage
+    severity: HIGH
+    pattern: |
+      Environment\.getExternalStorageDirectory\(\)|getExternalFilesDir\s*\(null\)
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 禁止使用公共外部存储，数据应存放在应用私有沙盒
+    false_positive_patterns: []
+    fix_suggestion: |
+      遵循《沙盒规约》：必须使用 context.filesDir 或 context.cacheDir，确保数据处于 App 沙盒保护下。
+
+  - id: SECURITY_010
+    name: Manual Debug Flag Override
+    severity: MEDIUM
+    pattern: |
+      isDebug\s*=\s*true
+    file_patterns:
+      - "*.kt"
+      - "*.java"
+    description: 检测到手动将 isDebug 强制设为 true，存在生产环境日志泄露风险
+    false_positive_patterns: []
+    fix_suggestion: |
+      遵循《屏蔽机制规范》：严禁手动在代码中修改 isDebug 状态。该状态应由初始化逻辑自动判定。
+
+# ============================================================================
+# 全局配置
+# ============================================================================
+global_config:
+  exclude_dirs:
+    - "**/build/**"
+    - "**/test/**"
+    - "**/androidTest/**"
+  exclude_files:
+    - "*.md"
+    - "proguard-rules.pro"
+  exit_codes:
+    CRITICAL: 1
+    HIGH: 1
+    MEDIUM: 0
+    LOW: 0
