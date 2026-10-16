@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="str_no_history">No history</string>
+    <string name="str_retry">Retry</string>
+    <string name="str_net_error_try_again">Check the network and try again.</string>
+    <string name="str_the_network_seems_unstable">Oops, the network seems unstable, please try again.</string>
+</resources>

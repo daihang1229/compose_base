@@ -1,0 +1,17 @@
+// Top-level build file for the compose-base framework.
+
+plugins {
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+}
+
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
+}
+
+ext {
+    minSdkVersion = libs.versions.minSdk.get().toInteger()
+    targetSdkVersion = libs.versions.targetSdk.get().toInteger()
+    compileSdkVersion = libs.versions.compileSdk.get().toInteger()
+}
