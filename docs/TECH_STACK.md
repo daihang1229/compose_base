@@ -73,10 +73,9 @@ com.rainbow.compose.ui
 | `androidx.compose.ui:ui` / `foundation` | BOM | Compose UI 基础 | `Modifier`、`@Composable`、布局等 Compose 基础 |
 | `androidx.compose.ui:ui-tooling-preview` | BOM | `@Preview` | 设计系统组件 Preview 与业务侧预览 |
 | **`com.squareup.retrofit2:retrofit`** | 2.11.0 | HTTP 客户端封装 | 声明式网络请求，Android 最主流的 REST 客户端 |
-| **`com.squareup.retrofit2:converter-gson`** | 2.11.0 | JSON 反序列化 | 把响应体自动转成 DTO 数据类 |
+| **`com.squareup.retrofit2:converter-gson`** | 2.11.0 | JSON 反序列化 | 把响应体自动转成 DTO 数据类（Gson 随其传递引入，无需单独声明） |
 | **`com.squareup.okhttp3:okhttp`** | 4.12.0 | 底层 HTTP 栈 | Retrofit 的底层传输层，负责连接池/重定向/缓存 |
 | **`com.squareup.okhttp3:logging-interceptor`** | 4.12.0 | 网络日志 | 调试期打印请求/响应，排查接口问题 |
-| **`com.google.code.gson:gson`** | 2.11.0 | JSON 解析 | Retrofit Gson 转换器的底层 JSON 库 |
 | **`com.google.dagger:hilt-android`** | 2.55 | 依赖注入运行时 | Google 官方推荐 DI 框架，配合 `@HiltViewModel` 注入 UseCase/Repository |
 
 > **网络库说明**：`core/contract/ApiResult` 是网络层与 MVI 层的桥接。Repository 返回 `Flow<ApiResult<T>>`，经 `toUiStateFlow()` 一键映射为 `UiState`，屏蔽具体网络实现（Retrofit 返回值 `Response` / `NetworkResult` 由业务侧自行转换）。

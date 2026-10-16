@@ -59,7 +59,6 @@ dependencies {
     api libs.retrofit.converter.gson
     api libs.okhttp
     api libs.okhttp.logging.interceptor
-    api libs.gson
 
     // 依赖注入
     api libs.hilt.android
