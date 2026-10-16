@@ -6,13 +6,11 @@
 - **Compose 设计系统**（`lib-compose-ui`）：`CommonTheme`、`CommonTitleBar`、`StatusOverlay`、`PullToRefreshLayout`、`CommonDialog`、`CommonImage` 等组件，以及语义化颜色 / 尺寸 / 字体 / 图标 / Lottie 资源。
 - **通用工具类**（`lib-compose-core/utils`）：`SingleLiveEvent`、`ActivityUtils`、`StateSizeTracker` 等。
 
-> 本仓库由 drama-android 项目抽取、解耦而来。原业务耦合（TheRouter / RxBus / 沉浸式 / 埋点 / BaseKV 等）已移除，仅保留 AndroidX + Compose + 协程 依赖。
-
 ## 模块结构
 
 ```
 compose_base/
-├── lib-compose-core/        # MVI 契约 + 基类 + 通用工具（无业务依赖）
+├── lib-compose-core/        # MVI 契约 + 基类 + 网络 + DI + 通用工具
 │   └── com.rainbow.compose.core
 │       ├── contract/        # MviContract / BaseMviViewModel / StateController / UiStateExt / ApiResult
 │       ├── base/            # BaseViewModel / BaseComposeActivity
@@ -28,6 +26,18 @@ compose_base/
         ├── keyboard/        # CommonKeyboard
         └── BaseCommonComposeActivity.kt
 ```
+
+## 技术栈
+
+| 分类 | 库 |
+|---|---|
+| UI | Compose BOM · Material3 · Material Icons Extended |
+| 架构 | Lifecycle · ViewModel · Coroutines · **Hilt** |
+| 网络 | **Retrofit · OkHttp · Gson · Logging-Interceptor** |
+| 图片/动画 | **Coil3** · Lottie |
+| 构建 | Gradle 8.10.2 · AGP 8.8.2 · Kotlin 2.1.10 · KSP |
+
+> 每个库的**版本、用途与引入原因**详见 [`docs/TECH_STACK.md`](docs/TECH_STACK.md)。
 
 ## 快速开始
 
@@ -51,6 +61,17 @@ dependencies {
     implementation project(':lib-compose-ui')
 }
 ```
+
+> **使用 Hilt**：`lib-compose-core` 已把 `hilt-android` 作为 `api` 暴露。若业务侧要用 `@HiltViewModel` / `@AndroidEntryPoint`，需在自身模块应用 Hilt 插件与 KSP：
+> ```groovy
+> plugins {
+>     alias(libs.plugins.hilt)
+>     alias(libs.plugins.ksp)
+> }
+> dependencies {
+>     ksp libs.hilt.android.compiler
+> }
+> ```
 
 ### 2. 写一个 MVI 页面
 
@@ -109,6 +130,8 @@ fun HomeContent(uiState: UiState<List<Item>>, onIntent: (HomeIntent) -> Unit) {
 - Android Gradle Plugin `8.8.2`
 - Kotlin `2.1.10`
 - Compose BOM `2024.12.01`
+- KSP `2.1.10-1.0.31`（Hilt 注解处理）
+- Hilt `2.55`
 - minSdk `24` / targetSdk `36`
 - JDK 17
 
@@ -118,15 +141,3 @@ fun HomeContent(uiState: UiState<List<Item>>, onIntent: (HomeIntent) -> Unit) {
 ./gradlew :lib-compose-core:assembleRelease
 ./gradlew :lib-compose-ui:assembleRelease
 ```
-
-## 与原项目（drama-android）的差异
-
-| 项 | drama-android | compose_base |
-|---|---|---|
-| 包名 | `com.storymatrix.drama.*` | `com.rainbow.compose.*` |
-| `BaseComposeActivity` 继承链 | TheRouter / RxBus / 沉浸式 / 埋点 | 纯 `ComponentActivity` |
-| `NetworkResult` 依赖 | `lib_http.NetworkResult` | 本地 `ApiResult` |
-| 深色模式判断 | `ViewUtils.isDarkMode()` | `isSystemInDarkTheme()` |
-| 日志 | `XlogUtils` | 本地 `ComposeLog` |
-| 资源 | 跨模块 `BizR` / `LangR` | 模块内 `R` |
-| 埋点 | `trackComposeClick` | 已移除 |

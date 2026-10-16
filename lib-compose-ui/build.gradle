@@ -45,8 +45,9 @@ dependencies {
     api libs.compose.ui.tooling.preview
     api libs.lottie.compose
 
-    implementation libs.coil.compose
-    implementation libs.coil.network.okhttp
+    // 图片加载（暴露给上层，供 CommonImage 及业务侧直接使用）
+    api libs.coil.compose
+    api libs.coil.network.okhttp
 
     debugImplementation libs.compose.ui.tooling
 }

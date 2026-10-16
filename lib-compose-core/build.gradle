@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -51,4 +53,15 @@ dependencies {
     api libs.compose.foundation
     api libs.compose.ui.tooling.preview
     debugImplementation libs.compose.ui.tooling
+
+    // 网络
+    api libs.retrofit
+    api libs.retrofit.converter.gson
+    api libs.okhttp
+    api libs.okhttp.logging.interceptor
+    api libs.gson
+
+    // 依赖注入
+    api libs.hilt.android
+    ksp libs.hilt.android.compiler
 }
